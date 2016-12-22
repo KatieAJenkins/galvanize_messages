@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous"></script>
+    <script type = "text/javascript" src = "js/index.js"></script>
+    <title>Galvanize Messages</title>
+  </head>
+  <body>
+    <h1>Enter a Message!</h1>
+    <hr><!--horizontal line tag-->
+    <form action = "POST">
+      <label for = "inputName">Name</label> <!--this labels the input field-->
+      <input id = "nameInput" type="text" name = "inputName" placeholder = "Enter Name">
+      <label for = "inputMessage">Message</label> <!--this labels the input field-->
+      <input id = "inputMessage" type="text" name = "inputMessage" placeholder = "Enter Message">
+      <button type="button" name="submit">Submit</button>
+    </form>
+
+    <h2>Messages</h2>
+    <div id = "messageContainer">
+    </div>
+
+    
+  </body>
+</html>
