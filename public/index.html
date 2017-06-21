@@ -12,18 +12,21 @@
   <body>
     <h1>Enter a Message!</h1>
     <hr><!--horizontal line tag-->
-    <form action = "POST">
+    <form>
       <label for = "inputName">Name</label> <!--this labels the input field-->
       <input id = "nameInput" type="text" name = "inputName" placeholder = "Enter Name">
       <label for = "inputMessage">Message</label> <!--this labels the input field-->
       <input id = "inputMessage" type="text" name = "inputMessage" placeholder = "Enter Message">
-      <button type="button" name="submit">Submit</button>
+      <button type="button" id="submit">Submit</button>
     </form>
 
-    <h2>Messages</h2>
+    <h1>Messages</h1>
     <div id = "messageContainer">
     </div>
 
-    
+  <!--create a messagefrom action = '/
+    '  in js attach an event listener to submit button -->
+
+
   </body>
 </html>

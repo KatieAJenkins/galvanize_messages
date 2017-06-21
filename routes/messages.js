@@ -8,6 +8,7 @@ const router = express.Router();
 const knex = require('../knex'); //takes out of Route folder and up folder hierarchy to where knex.js lives
 
 router.get('/' , (req, res, next) => {
+  console.log(req.body.name);
   knex('messages')
     .select( 'id', 'name', 'message')
     .then((results) => {
@@ -64,29 +65,24 @@ router.post('/' , (req, res, next) => {
     });
 });
 
+
+
 router.patch('/:id' , (req, res, next) => {
   const id = Number.parseInt(req.params.id);
   const name = req.body.name;
   const message = req.body.message;
-
     if (Number.isNaN(id)) {
       return next();
     }
-
   knex ('messages')
     .where ('id' , id)
-    .first() //not sure I need this??
-    .then ((results) => {
-      return knex('messages')
-        .update({
-          name: name,
-          message: message
-        }) //not sure about this??
-        .returning (['id', 'name', 'message'])
-        .where('id' , id); //reverse this with line 85?
+    .update({
+      name,
+      message
     })
-    .then ((updatedResults) => {
-      res.send(updatedResults[0]);
+    .returning (['id', 'name', 'message'])
+    .then ((results) => {
+      res.send(results[0]);
     })
     .catch ((err) => {
       next(err);
@@ -94,7 +90,20 @@ router.patch('/:id' , (req, res, next) => {
 });
 
 router.delete('/:id' , (req, res, next) => {
-  const id = Number.parseInt()
-})
+  const id = Number.parseInt(req.params.id);
+  if (Number.isNaN(id)) {
+    return next();
+  }
+  knex('messages')
+    .where('id' , id)
+    .del()
+    .returning (['id' , 'name', 'message'])
+    .then ((results) => {
+      res.send(results[0]);
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
 
 module.exports = router; //gives object that makes contents available to other files
