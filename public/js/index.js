@@ -4,7 +4,6 @@ $(document).ready(function(){
   // console.log("It's ALIVE");
 
 $('#submit').click(function (event){
- // console.log($('#nameInput').val())
  event.preventDefault();
 
   var name = $('#nameInput').val();
@@ -23,7 +22,7 @@ $('#submit').click(function (event){
   $.ajax(options)
     .done(() => {
       console.log('DONE');
-      window.location.href = '/'; //reloads page once infor is received
+      window.location.href = '/'; //reloads page once .done is called
     })
     .fail(($xhr) => {
       console.log($xhr);
@@ -35,23 +34,21 @@ $('#submit').click(function (event){
     .done((results) => {
       console.log(results);//array of objs
 
+      //Loop through results from getJSON call to dynamically add to page
       for (var i = 0; i < results.length; i++) {
         var $message = $('<p>').text(results[i].message);
+
+        //Create Edit and Delete buttons manually
         var $editButton = document.createElement('button');
         var $editMessage = document.createTextNode('Edit');
         $editButton.appendChild($editMessage);
-        // document.body.appendChild($editButton);
+
         var $deleteButton = document.createElement('button');
         var $deleteMessage = document.createTextNode('Delete');
         $deleteButton.appendChild($deleteMessage);
 
-        // <a id="editBook" class="waves-effect waves-light btn-large amber darken-3">
-        //      <i class="material-icons left">edit</i>
-        //      Edit
-        //    </a>
-
         var $name = $('<h6>').text(results[i].name);
-
+        //Append all dynamically created DOM elements to message container
         $('#messageContainer').append($message);
         $('#messageContainer').append($name);
         $('#messageContainer').append($editButton);
