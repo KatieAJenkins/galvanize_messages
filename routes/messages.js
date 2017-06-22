@@ -21,7 +21,8 @@ router.get('/' , (req, res, next) => {
 });
 
 router.get('/:id' , (req, res, next) => { ///:id = url param
-  const id = Number.parseInt(req.params.id); //req = object built in express, holds onto everything we receive from HTTP request. params = key in req object. Number.parseInt makes sure this is a number
+  const id = Number.parseInt(req.params.id);
+  console.log('id', id); //req = object built in express, holds onto everything we receive from HTTP request. params = key in req object. Number.parseInt makes sure this is a number
   // console.log(req.params, 'req.params');
   if (Number.isNaN(id)) { //middleware substack. Can set additional logic here with multiple if statements.
     return next();
@@ -65,28 +66,35 @@ router.post('/' , (req, res, next) => {
     });
 });
 
-
-
 router.patch('/:id' , (req, res, next) => {
+  // console.log("patch route working!");
+  console.log(req.body);
   const id = Number.parseInt(req.params.id);
+  console.log('id', id);
+
   const name = req.body.name;
+  console.log('name', name);
+
   const message = req.body.message;
-    if (Number.isNaN(id)) {
-      return next();
-    }
-  knex ('messages')
-    .where ('id' , id)
-    .update({
-      name,
-      message
-    })
-    .returning (['id', 'name', 'message'])
-    .then ((results) => {
-      res.send(results[0]);
-    })
-    .catch ((err) => {
-      next(err);
-    });
+  console.log(message);
+
+  if (Number.isNaN(id)) {
+    return next();
+  }
+
+  // knex ('messages')
+  //   .where ('id' , id)
+  //   .update({
+  //     name,
+  //     message
+  //   })
+  //   .returning (['id', 'name', 'message'])
+  //   .then ((results) => {
+  //     res.send(results[0]);
+  //   })
+  //   .catch ((err) => {
+  //     next(err);
+  //   });
 });
 
 router.delete('/:id' , (req, res, next) => {
