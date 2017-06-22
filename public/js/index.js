@@ -84,7 +84,6 @@ $('#submit').click(function (event){
           // console.log(message);
 
           $('#nameInput').val(name);
-
           $('#messageInput').val(message);
 
           //hide Submit button
@@ -104,14 +103,17 @@ $('#submit').click(function (event){
               dataType: 'json',
               type: 'PATCH',
               url: `/messages/${editMessageId}`,
-              data: JSON.stringify({patchName, patchMessage})
-            };
-            console.log(options);
+              data: JSON.stringify({name: patchName, message:patchMessage})
+            }
 
             $.ajax(options)
+            console.log(options)
               .done(() => {
-                console.log('UPDATED!');
+                // console.log('UPDATED!');
                 // window.location.href = '/'; //reloads page once .done is called to remove text from page
+                $('#nameInput').val('');
+                $('#messageInput').val('');
+
               })
               .fail((err) => {
                 console.log(err);
