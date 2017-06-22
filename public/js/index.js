@@ -61,13 +61,12 @@ $('#submit').click(function (event){
         $('#messageContainer').append($deleteButton);
 
 ////DELETE FUNCTIONALITY////
-  //  deleteMessage($id){
         $('.deleteButton').click(function(event) {
           event.preventDefault();
           // console.log("clicked");
           var thisMessage = $(this);
           var thisMessageId = thisMessage[0].getAttribute('id');
-          console.log(thisMessageId);
+          // console.log(thisMessageId);
 
           const options = {
             dataType: 'json',
@@ -85,9 +84,8 @@ $('#submit').click(function (event){
             });
         });
       }
-    // }
-  })
-    .fail(() => {
+    })
+  .fail(() => {
       $('#messageContainer').text('Could not delete messages');
-    });
+  });
 }); //document ready closure
