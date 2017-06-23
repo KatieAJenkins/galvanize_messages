@@ -1,7 +1,7 @@
 'use strict';
 
 $(document).ready(function(){
-  // console.log("It's ALIVE");
+  // console.log("She's ALIVE");
   $("#update").hide();
 
 $('#submit').click(function (event){
@@ -15,15 +15,15 @@ $('#submit').click(function (event){
 
   var options = {
     contentType: 'application/json',
-    type: 'POST', //change this type based on what you are doing
-    url: '/messages', //would also need to specify id if patching
-    data: JSON.stringify({name, message})//set up object and stringify
+    type: 'POST',
+    url: '/messages',
+    data: JSON.stringify({name, message})
   };
 
   $.ajax(options)
     .done(() => {
       // console.log('DONE');
-      window.location.href = '/'; //reloads page once .done is called
+      window.location.href = '/';
     })
     .fail((err) => {
       console.log(err);
@@ -32,8 +32,6 @@ $('#submit').click(function (event){
 
   $.getJSON('/messages') //this fires after page reloads -->this is the API endpoint
     .done((results) => {
-      console.log(results);//array of objs
-
       //Loop through results from getJSON call to dynamically add to page
       for (var i = 0; i < results.length; i++) {
 
@@ -62,11 +60,9 @@ $('#submit').click(function (event){
         $('#messageContainer').append($name);
         $('#messageContainer').append($editButton);
         $('#messageContainer').append($deleteButton);
-
       }
 ////EDIT FUNCTIONALITY/////
       $('.editButton').click(function(event){
-        // console.log("clicked");
         event.preventDefault();
 
         //hide Submit button
@@ -74,16 +70,12 @@ $('#submit').click(function (event){
 
         //Find ID of message to edit
         var editMessage = $(this);
-        // console.log(editMessage);
+
         var editMessageID = editMessage[0].getAttribute('id').toString().substring(4);
 
-        // console.log('id', editMessageID);
-
         var name = results[0].name;
-        // console.log(name);
 
         var message = results[0].message;
-        // console.log(message);
 
         //add the input values to form fields to edit
         $('#nameInput').val(name);
@@ -109,7 +101,7 @@ $('#submit').click(function (event){
             data: JSON.stringify({newName, newMessage}),
             success: function(result) {
               console.log('patch successful!', result);
-              // window.location.href = '/';
+              window.location.href = '/';
             },
             fail: function(err) {
             console.log("error");
