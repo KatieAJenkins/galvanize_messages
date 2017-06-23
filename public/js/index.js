@@ -40,7 +40,7 @@ $('#submit').click(function (event){
         var $id = results[i].id;
         // console.log($id);
 
-        var $name = results[i].name;
+        var $name = $('<h6>').text(results[i].name);
 
         var $message = $('<p>').text(results[i].message);
 
@@ -57,69 +57,67 @@ $('#submit').click(function (event){
         $deleteButton.setAttribute("id", "delete" + $id);
         $deleteButton.appendChild($deleteMessage);
 
-        var $name = $('<h6>').text(results[i].name);
-
         //Append all dynamically created DOM elements to message container
         $('#messageContainer').append($message);
         $('#messageContainer').append($name);
         $('#messageContainer').append($editButton);
         $('#messageContainer').append($deleteButton);
 
+      }
 ////EDIT FUNCTIONALITY/////
-        $('.editButton').click(function(event){
-          // console.log("clicked");
+      $('.editButton').click(function(event){
+        // console.log("clicked");
+        event.preventDefault();
+
+        //hide Submit button
+        $('#submit').hide();
+
+        //Find ID of message to edit
+        var editMessage = $(this);
+        // console.log(editMessage);
+        var editMessageID = editMessage[0].getAttribute('id').toString().substring(4);
+
+        // console.log('id', editMessageID);
+
+        var name = results[0].name;
+        // console.log(name);
+
+        var message = results[0].message;
+        // console.log(message);
+
+        //add the input values to form fields to edit
+        $('#nameInput').val(name);
+        $('#messageInput').val(message);
+
+        // //show hidden Update button
+        $("#update").show();
+
+        //ajax call on update button click
+        $("#update").on('click', function (event) {
           event.preventDefault();
-          // console.log(event);
 
-          //Find ID of message to edit
-          var editMessage = $(this);
-          // console.log(editMessage);
-          var editMessageId = editMessage[0].getAttribute('id').toString().substring(4);
-          // console.log(editMessageId);
+          let newName = $('#nameInput').val();
+          console.log('newName', newName);
 
-          var name = results[0].name;
-          // console.log(name);
+          let newMessage = $('#messageInput').val();
+          console.log('newMessage', newMessage);
 
-          var message = results[0].message;
-          // console.log(message);
-
-          $('#nameInput').val(name);
-          $('#messageInput').val(message);
-
-          //hide Submit button
-          $('#submit').hide();
-
-          //show hidden Update button
-          $("#update").show().on('click', function () {
-
-          let patchName = $('#nameInput').val();
-          console.log(patchName);
-
-          let patchMessage = $('#messageInput').val();
-          console.log(patchMessage);
-
-          //on click send patch request
-            const options = {
-              dataType: 'json',
-              type: 'PATCH',
-              url: `/messages/${editMessageId}`,
-              data: JSON.stringify({name: patchName, message:patchMessage})
+          $.ajax({
+            url: `/messages/${editMessageID}`,
+            type: 'PATCH',
+            contentType: "application/json",
+            data: JSON.stringify({newName, newMessage}),
+            success: function(result) {
+              console.log('patch successful!', result);
+              // window.location.href = '/';
+            },
+            fail: function(err) {
+            console.log("error");
+            console.error(err);
             }
-
-            $.ajax(options)
-            console.log(options)
-              .done(() => {
-                // console.log('UPDATED!');
-                // window.location.href = '/'; //reloads page once .done is called to remove text from page
-                $('#nameInput').val('');
-                $('#messageInput').val('');
-
-              })
-              .fail((err) => {
-                console.log(err);
-              });
-            });
           });
+        });
+      });
 
 ////DELETE FUNCTIONALITY////
         $('.deleteButton').click(function(event) {
@@ -127,10 +125,8 @@ $('#submit').click(function (event){
           // console.log("clicked");
           var deleteMessage = $(this);
           var deleteMessageID = deleteMessage[0].getAttribute('id').toString().substring(6);
-          console.log(deleteMessageID);
 
           const options = {
-            dataType: 'json',
             type: 'DELETE',
             url: `/messages/${deleteMessageID}`
           };
@@ -138,15 +134,14 @@ $('#submit').click(function (event){
           $.ajax(options)
             .done(() => {
               // console.log('DELETED!');
-              window.location.href = '/'; //reloads page once .done is called to remove text from page
+              window.location.href = '/';
             })
-            .fail(($xhr) => {
-              console.log($xhr);
+            .fail((err) => {
+              console.log(err);
             });
         });
-    }
-  })
-  .fail(() => {
+    })
+    .fail(() => {
       $('#messageContainer').text('Could not get messages');
-  });
+    });
 }); //document ready closure

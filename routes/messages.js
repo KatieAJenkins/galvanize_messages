@@ -8,7 +8,6 @@ const router = express.Router();
 const knex = require('../knex'); //takes out of Route folder and up folder hierarchy to where knex.js lives
 
 router.get('/' , (req, res, next) => {
-  console.log(req.body.name);
   knex('messages')
     .select( 'id', 'name', 'message')
     .then((results) => {
@@ -66,36 +65,88 @@ router.post('/' , (req, res, next) => {
     });
 });
 
-router.patch('/:id' , (req, res, next) => {
-  // console.log("patch route working!");
-  console.log(req.body);
-  const id = Number.parseInt(req.params.id);
-  console.log('id', id);
+// router.patch('/:id' , (req, res, next) => {
+//   // console.log("patch route working!");
+//   // console.log(req.params);
+//   // console.log(req.body);
+//   const id = Number.parseInt(req.params.id);
+//   console.log('id', id);
+//
+//   // console.log('req.body', req.body);
+//   // const name = req.body.name;
+//   // console.log('name', name);
+//   //
+//   // const message = req.body.message;
+//   // console.log(message);
+//   //
+//
+//   if (Number.isNaN(id)) {
+//     return next();
+//   }
+//
+//   knex ('messages')
+//     .where ('id' , id)
+//     .update({
+//       name,
+//       message
+//     })
+//     .returning (['id', 'name', 'message'])
+//     .then ((results) => {
+//       console.log(results);
+//       res.send(results[0]);
+//     })
+//     .catch ((err) => {
+//       next(err);
+//     });
+// });
 
-  const name = req.body.name;
-  console.log('name', name);
+/////////
+router.patch('/:id', (req, res, next) => {
+  // console.log('patch route working');
+  var id = Number.parseInt(req.params.id);
+  console.log('server id', id);
 
-  const message = req.body.message;
+  var name = req.body.newName;
+  console.log(name);
+  var message = req.body.newMessage;
   console.log(message);
 
-  if (Number.isNaN(id)) {
-    return next();
-  }
+  knex('messages')
+    .where('id', id)
+    .orderBy('id')
+    .then((result) => {
+      if (!result) {
+        res.send('user not found');
+      }
+      console.log(result);
+      let toUpdateMessage = result[0];
+      // console.log(req.body.message);
+      console.log(toUpdateMessage.message);
 
-  // knex ('messages')
-  //   .where ('id' , id)
-  //   .update({
-  //     name,
-  //     message
-  //   })
-  //   .returning (['id', 'name', 'message'])
-  //   .then ((results) => {
-  //     res.send(results[0]);
-  //   })
-  //   .catch ((err) => {
-  //     next(err);
-  //   });
+      toUpdateMessage.name = name;
+      toUpdateMessage.message = message;
+
+      knex('messages')
+        .where('id', id)
+        .update(toUpdateMessage, '*')
+        .then((result) => {
+          // delete result[0].id;
+          delete result[0].created_at;
+          delete result[0].updated_at;
+          console.log('result 2 knex', result);
+          res.send(result[0]);
+        })
+        .catch((err) => {
+          next(err);
+        });
+    })
+    .catch((err) => {
+      next(err);
+    });
 });
+////////
+// if (Object.keys(req.body).length === 0 ) {
+//   console.log("no req.body found!");
 
 router.delete('/:id' , (req, res, next) => {
   const id = Number.parseInt(req.params.id);
