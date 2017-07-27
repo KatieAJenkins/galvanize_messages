@@ -68,6 +68,7 @@ router.patch('/:id', (req, res, next) => {
   var id = Number.parseInt(req.params.id);
   console.log(req.body);
   var newName = req.body.name;
+  console.log(newName);
   var newMessage = req.body.message;
 
   knex('messages')
@@ -81,6 +82,7 @@ router.patch('/:id', (req, res, next) => {
       let messageToUpdate = result[0];
       messageToUpdate.name = newName;
       messageToUpdate.message = newMessage;
+      console.log(messageToUpdate.message);
 
       knex('messages')
         .where('id', id)

@@ -61,6 +61,7 @@ $('#submit').click(function (event){
         $('#messageContainer').append($editButton);
         $('#messageContainer').append($deleteButton);
       }
+      
 ////EDIT FUNCTIONALITY/////
       $('.editButton').click(function(event){
         event.preventDefault();
